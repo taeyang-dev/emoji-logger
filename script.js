@@ -60,6 +60,7 @@ function loadRecords() {
 // 현재 미팅 ID 표시 업데이트
 function updateCurrentMeetingDisplay() {
     const displayElement = document.getElementById('currentMeetingDisplay');
+    if (!displayElement) return;
 
     // records를 역순으로 확인하여 가장 최근 미팅 ID 찾기
     let currentMeetingId = null;
@@ -167,7 +168,9 @@ function displayParticipants() {
 // 선택된 참여자 표시 업데이트
 function updateSelectedDisplay() {
     const displayElement = document.getElementById('selectedName');
-    displayElement.textContent = selectedParticipant || '없음';
+    if (displayElement) {
+        displayElement.textContent = selectedParticipant || '없음';
+    }
 }
 
 // 이모지 버튼 클릭 핸들러
@@ -216,28 +219,90 @@ function displayHistory() {
         return;
     }
 
-    historyContainer.innerHTML = records.map(record => {
-        // 미팅 구분선인 경우
+    // 참여자별로 기록 분류
+    const participantRecords = {};
+    let meetingDividers = [];
+
+    records.forEach(record => {
         if (record.type === 'meeting-divider') {
-            return `
+            meetingDividers.push(record);
+        } else {
+            const participant = record.participant || '알 수 없음';
+            if (!participantRecords[participant]) {
+                participantRecords[participant] = [];
+            }
+            participantRecords[participant].push(record);
+        }
+    });
+
+    let html = '';
+
+    // 미팅 구분선 표시
+    meetingDividers.forEach(divider => {
+        html += `
             <div class="history-divider">
-                <span class="history-divider-text">📌 ${record.meetingId}</span>
+                <span class="history-divider-text">📌 ${divider.meetingId}</span>
             </div>
         `;
+    });
+
+    // 참여자별로 기록 표시
+    Object.keys(participantRecords).forEach(participant => {
+        // 손 동작과 다른 이모지 분리 (손 내리기는 제외)
+        const handsRecords = participantRecords[participant].filter(r => r.name === 'Hand Raises' || r.name === 'Hands Down');
+        const handRaisesRecords = participantRecords[participant].filter(r => r.name === 'Hand Raises');
+        const otherRecords = participantRecords[participant].filter(r => r.name !== 'Hand Raises' && r.name !== 'Hands Down');
+
+        html += `
+            <div class="participant-group">
+                <div class="participant-group-header">
+                    <strong>${participant}</strong>
+                    <span class="participant-count">손: ${handRaisesRecords.length}회 / 리액션: ${otherRecords.length}회</span>
+                </div>
+                <div class="participant-records">
+        `;
+
+        // 손 동작 표시
+        if (handsRecords.length > 0) {
+            html += `<div class="hands-section">`;
+            handsRecords.forEach(record => {
+                html += `
+                    <div class="history-item">
+                        <div class="history-text">
+                            <span class="history-emoji">${record.emoji}</span>
+                            <span>${record.name}</span>
+                        </div>
+                        <div class="history-time">${record.time}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
         }
 
-        // 일반 기록인 경우
-        const participant = record.participant || '알 수 없음';
-        return `
-        <div class="history-item">
-            <div class="history-text">
-                <span class="history-emoji">${record.emoji}</span>
-                <span><strong>${participant}</strong> - ${record.name}</span>
+        // 다른 이모지 표시
+        if (otherRecords.length > 0) {
+            html += `<div class="other-emoji-section">`;
+            otherRecords.forEach(record => {
+                html += `
+                    <div class="history-item">
+                        <div class="history-text">
+                            <span class="history-emoji">${record.emoji}</span>
+                            <span>${record.name}</span>
+                        </div>
+                        <div class="history-time">${record.time}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        html += `
+                </div>
             </div>
-            <div class="history-time">${record.time}</div>
-        </div>
-    `;
-    }).join('');
+        `;
+    });
+
+    historyContainer.innerHTML = html;
 }
 
 // 전체 삭제 기능

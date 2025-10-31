@@ -539,6 +539,59 @@ body {
     font-weight: 600;
 }
 
+.participant-group {
+    margin-bottom: 25px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.participant-group-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.participant-count {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.participant-records {
+    padding: 10px;
+}
+
+.hands-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed #e0e0e0;
+}
+
+.hands-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.other-emoji-section {
+    margin-top: 15px;
+}
+
+.participant-records .history-item {
+    margin-bottom: 8px;
+    border-left: 3px solid #667eea;
+    padding: 12px;
+}
+
 .empty-history {
     text-align: center;
     color: #999;

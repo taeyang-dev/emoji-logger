@@ -31,6 +31,12 @@
             <!-- 참여자 관리 영역 -->
             <div class="participant-section">
                 <div class="section-title">참여자 관리</div>
+                <div class="meeting-divider">
+                    <div class="input-group">
+                        <input type="text" id="meetingIdInput" placeholder="미팅 ID 입력" maxlength="50">
+                        <button id="addMeetingIdBtn" class="add-btn meeting-id-btn">추가</button>
+                    </div>
+                </div>
                 <div class="participant-controls">
                     <div class="input-group">
                         <input type="text" id="participantInput" placeholder="참여자 이름 입력" maxlength="20">
@@ -38,15 +44,6 @@
                         <button id="addParticipantBtn" class="add-btn">추가</button>
                     </div>
                     <div class="participants-list" id="participantsList"></div>
-                </div>
-                <div class="selected-participant" id="selectedParticipant">
-                    <strong>현재 선택:</strong> <span id="selectedName">없음</span>
-                </div>
-                <div class="meeting-divider">
-                    <div class="input-group">
-                        <input type="text" id="meetingIdInput" placeholder="미팅 ID 입력" maxlength="50">
-                        <button id="addMeetingIdBtn" class="add-btn meeting-id-btn">추가</button>
-                    </div>
                 </div>
             </div>
 
@@ -123,7 +120,6 @@
             <div class="history-section">
                 <div class="history-header">
                     <h2>📋 기록 내역</h2>
-                    <div id="currentMeetingDisplay" class="current-meeting-display"></div>
                     <div class="header-buttons">
                         <button id="exportExcelBtn" class="export-excel-btn">📊 엑셀로 내보내기</button>
                         <button id="clearBtn" class="clear-btn">새 미팅</button>
