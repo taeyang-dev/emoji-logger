@@ -1,0 +1,462 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.participant-section {
+    padding: 30px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.participant-controls {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#participantInput {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+#participantInput:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.add-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.participants-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.participant-chip {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.participant-chip:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.participant-chip.selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+}
+
+.participant-chip .delete-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+}
+
+.participant-chip:hover .delete-btn {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.selected-participant {
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: #667eea;
+    font-size: 0.95em;
+}
+
+.selected-participant #selectedName {
+    font-weight: 600;
+    color: #764ba2;
+}
+
+.meeting-divider {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed #e0e0e0;
+}
+
+.meeting-id-btn {
+    white-space: nowrap;
+    font-size: 0.9em;
+    padding: 12px 20px;
+}
+
+.emoji-section {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0;
+}
+
+.emoji-content {
+    padding-right: 30px;
+}
+
+.section-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #667eea;
+    margin: 20px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.section-title:first-child {
+    margin-top: 0;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.emoji-btn {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.emoji-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+}
+
+.emoji-btn:active {
+    transform: translateY(-2px);
+}
+
+.emoji-btn.clicked {
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border-color: #667eea;
+}
+
+.emoji {
+    font-size: 3em;
+    line-height: 1;
+}
+
+.emoji-name {
+    font-size: 0.85em;
+    color: #666;
+    font-weight: 500;
+}
+
+.time-display {
+    font-size: 0.75em;
+    color: #667eea;
+    font-weight: 600;
+    text-align: center;
+    min-height: 15px;
+    padding: 4px 8px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.history-section {
+    background: #f8f9fa;
+    padding: 30px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-header h2 {
+    color: #333;
+    font-size: 1.5em;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.export-btn,
+.import-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover,
+.import-btn:hover {
+    background: #5568d3;
+    transform: scale(1.05);
+}
+
+.clear-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+    background: #ff5252;
+    transform: scale(1.05);
+}
+
+.history-list {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+.history-item {
+    background: white;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    animation: slideIn 0.3s ease;
+}
+
+.history-divider {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1em;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    animation: slideIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.history-divider::before,
+.history-divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.history-divider-text {
+    white-space: nowrap;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.history-emoji {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.history-text {
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.history-time {
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.empty-history {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-size: 1em;
+}
+
+.footer {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    border-top: 2px solid #e0e0e0;
+}
+
+.current-time {
+    font-size: 1.1em;
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 968px) {
+    .emoji-section {
+        grid-template-columns: 1fr;
+    }
+
+    .emoji-content {
+        padding-right: 0;
+        padding-bottom: 30px;
+    }
+
+    .history-list {
+        max-height: 300px;
+    }
+
+    .header h1 {
+        font-size: 2em;
+    }
+
+    .emoji-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .emoji-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .emoji {
+        font-size: 2.5em;
+    }
+
+    .header-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .export-btn,
+    .import-btn,
+    .clear-btn {
+        width: 100%;
+    }
+}
+
