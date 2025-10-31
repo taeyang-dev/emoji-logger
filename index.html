@@ -3,23 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Meet 이모지 기록기</title>
+    <title>PM/PL 리코딩 관리</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📹 Google Meet 이모지 기록기</h1>
-            <p class="subtitle">이모지와 손 동작을 기록하고 시간을 추적하세요</p>
+            <h1>📹 PM/PL 리코딩 관리</h1>
+            <p class="subtitle">미팅 관리를 위한 리코딩 도구</p>
         </div>
 
         <div class="main-content">
+            <!-- 미팅 관리 영역 -->
+            <div class="meeting-management-section">
+                <button id="startMeetingBtn" class="start-meeting-btn">⏰ 미팅 시작</button>
+                <div id="meetingTimeDisplay" class="meeting-time-display"></div>
+
+                <div class="section-title">참여 요건</div>
+                <div id="requirementsList" class="requirements-list"></div>
+                <div class="input-group">
+                    <input type="text" id="requirementInput" placeholder="참여 요건 입력" maxlength="100">
+                    <button id="addRequirementBtn" class="add-btn-small">추가</button>
+                </div>
+            </div>
+
             <!-- 참여자 관리 영역 -->
             <div class="participant-section">
                 <div class="section-title">참여자 관리</div>
                 <div class="participant-controls">
                     <div class="input-group">
                         <input type="text" id="participantInput" placeholder="참여자 이름 입력" maxlength="20">
+                        <input type="email" id="participantEmailInput" placeholder="이메일 입력" style="max-width: 250px;">
                         <button id="addParticipantBtn" class="add-btn">추가</button>
                     </div>
                     <div class="participants-list" id="participantsList"></div>
@@ -29,8 +44,8 @@
                 </div>
                 <div class="meeting-divider">
                     <div class="input-group">
-                        <input type="text" id="meetingIdInput" placeholder="미팅 ID 입력 (예: Team Meeting, 프로젝트 회의)" maxlength="50">
-                        <button id="addMeetingIdBtn" class="add-btn meeting-id-btn">미팅 구분선 추가</button>
+                        <input type="text" id="meetingIdInput" placeholder="미팅 ID 입력" maxlength="50">
+                        <button id="addMeetingIdBtn" class="add-btn meeting-id-btn">추가</button>
                     </div>
                 </div>
             </div>
@@ -40,20 +55,15 @@
                 <div class="emoji-content">
                     <div class="section-title">이모지 선택</div>
                     <div class="emoji-grid">
-                        <button class="emoji-btn hands-action" data-emoji="✋" data-name="Hands Up">
+                        <button class="emoji-btn hands-action" data-emoji="✋" data-name="Hand Raises">
                             <div class="emoji">✋</div>
-                            <div class="emoji-name">Hands Up</div>
+                            <div class="emoji-name">Hand Raises</div>
                             <div class="time-display" data-emoji="✋"></div>
                         </button>
                         <button class="emoji-btn hands-action" data-emoji="👇" data-name="Hands Down">
                             <div class="emoji">👇</div>
                             <div class="emoji-name">Hands Down</div>
                             <div class="time-display" data-emoji="👇"></div>
-                        </button>
-                        <button class="emoji-btn" data-emoji="💖" data-name="Heart">
-                            <div class="emoji">💖</div>
-                            <div class="emoji-name">Heart</div>
-                            <div class="time-display" data-emoji="💖"></div>
                         </button>
                         <button class="emoji-btn" data-emoji="👍" data-name="Thumbs Up">
                             <div class="emoji">👍</div>
@@ -65,50 +75,60 @@
                             <div class="emoji-name">Thumbs Down</div>
                             <div class="time-display" data-emoji="👎"></div>
                         </button>
+                        <button class="emoji-btn" data-emoji="👏" data-name="Clapping Hands">
+                            <div class="emoji">👏</div>
+                            <div class="emoji-name">Clapping Hands</div>
+                            <div class="time-display" data-emoji="👏"></div>
+                        </button>
                         <button class="emoji-btn" data-emoji="🎉" data-name="Celebration">
                             <div class="emoji">🎉</div>
                             <div class="emoji-name">Celebration</div>
                             <div class="time-display" data-emoji="🎉"></div>
                         </button>
-                        <button class="emoji-btn" data-emoji="👏" data-name="Clap">
-                            <div class="emoji">👏</div>
-                            <div class="emoji-name">Clap</div>
-                            <div class="time-display" data-emoji="👏"></div>
+                        <button class="emoji-btn" data-emoji="💖" data-name="Heart">
+                            <div class="emoji">💖</div>
+                            <div class="emoji-name">Heart</div>
+                            <div class="time-display" data-emoji="💖"></div>
                         </button>
-                        <button class="emoji-btn" data-emoji="😂" data-name="Laugh">
-                            <div class="emoji">😂</div>
-                            <div class="emoji-name">Laugh</div>
-                            <div class="time-display" data-emoji="😂"></div>
+                        <button class="emoji-btn" data-emoji="✋" data-name="High-five">
+                            <div class="emoji" style="visibility: hidden;">✋</div>
+                            <div class="emoji-name">High-five</div>
+                            <div class="time-display" data-emoji="✋"></div>
                         </button>
                         <button class="emoji-btn" data-emoji="😮" data-name="Surprise">
                             <div class="emoji">😮</div>
                             <div class="emoji-name">Surprise</div>
                             <div class="time-display" data-emoji="😮"></div>
                         </button>
-                        <button class="emoji-btn" data-emoji="😢" data-name="Sad">
-                            <div class="emoji">😢</div>
-                            <div class="emoji-name">Sad</div>
-                            <div class="time-display" data-emoji="😢"></div>
-                        </button>
                         <button class="emoji-btn" data-emoji="🤔" data-name="Thinking Face">
                             <div class="emoji">🤔</div>
                             <div class="emoji-name">Thinking Face</div>
                             <div class="time-display" data-emoji="🤔"></div>
                         </button>
+                        <button class="emoji-btn" data-emoji="😂" data-name="Laugh">
+                            <div class="emoji">😂</div>
+                            <div class="emoji-name">Laugh</div>
+                            <div class="time-display" data-emoji="😂"></div>
+                        </button>
+                        <button class="emoji-btn" data-emoji="😢" data-name="Sad">
+                            <div class="emoji">😢</div>
+                            <div class="emoji-name">Sad</div>
+                            <div class="time-display" data-emoji="😢"></div>
+                        </button>
                     </div>
                 </div>
+            </div>
 
             <!-- 기록 내역 영역 -->
             <div class="history-section">
                 <div class="history-header">
                     <h2>📋 기록 내역</h2>
+                    <div id="currentMeetingDisplay" class="current-meeting-display"></div>
                     <div class="header-buttons">
-                        <button id="exportBtn" class="export-btn">내보내기</button>
-                        <button id="importBtn" class="import-btn">불러오기</button>
-                        <button id="clearBtn" class="clear-btn">전체 삭제</button>
+                        <button id="exportExcelBtn" class="export-excel-btn">📊 엑셀로 내보내기</button>
+                        <button id="clearBtn" class="clear-btn">새 미팅</button>
                     </div>
                 </div>
-                <input type="file" id="fileInput" accept=".json" style="display: none;">
                 <div id="history" class="history-list"></div>
             </div>
         </div>
@@ -122,4 +142,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
