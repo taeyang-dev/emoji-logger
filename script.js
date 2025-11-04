@@ -223,15 +223,15 @@ function displayHistory() {
     const participantRecords = {};
     let meetingDividers = [];
 
-    records.forEach(record => {
+    records.forEach((record, index) => {
         if (record.type === 'meeting-divider') {
-            meetingDividers.push(record);
+            meetingDividers.push({ ...record, originalIndex: index });
         } else {
             const participant = record.participant || '알 수 없음';
             if (!participantRecords[participant]) {
                 participantRecords[participant] = [];
             }
-            participantRecords[participant].push(record);
+            participantRecords[participant].push({ ...record, originalIndex: index });
         }
     });
 
@@ -273,6 +273,7 @@ function displayHistory() {
                             <span>${record.name}</span>
                         </div>
                         <div class="history-time">${record.time}</div>
+                        <button class="delete-record-btn" onclick="deleteRecord(${record.originalIndex})" title="삭제">×</button>
                     </div>
                 `;
             });
@@ -290,6 +291,7 @@ function displayHistory() {
                             <span>${record.name}</span>
                         </div>
                         <div class="history-time">${record.time}</div>
+                        <button class="delete-record-btn" onclick="deleteRecord(${record.originalIndex})" title="삭제">×</button>
                     </div>
                 `;
             });
@@ -305,26 +307,30 @@ function displayHistory() {
     historyContainer.innerHTML = html;
 }
 
-// 전체 삭제 기능
+// 개별 기록 삭제
+function deleteRecord(index) {
+    if (confirm('이 기록을 삭제하시겠습니까?')) {
+        records.splice(index, 1);
+        saveRecords();
+        displayHistory();
+        updateCurrentMeetingDisplay();
+        
+        // 이모지 버튼의 시간 표시도 업데이트
+        document.querySelectorAll('.time-display').forEach(display => {
+            display.textContent = '';
+        });
+    }
+}
+
+// 전체 삭제 기능 (records만 초기화)
 function handleClearHistory() {
     if (records.length === 0) return;
 
-    if (confirm('모든 기록을 삭제하시겠습니까?')) {
+    if (confirm('모든 기록 내역을 삭제하시겠습니까? (참여자 정보와 미팅 설정은 유지됩니다)')) {
         records = [];
-        participants = [];
-        selectedParticipant = null;
-        meetingStartTime = null;
-        requirements = [];
         saveRecords();
-        saveParticipants();
-        saveRequirements();
-        localStorage.removeItem('meetingStartTime');
         displayHistory();
-        displayParticipants();
-        updateSelectedDisplay();
         updateCurrentMeetingDisplay();
-        updateMeetingTimeDisplay();
-        displayRequirements();
 
         // 모든 시간 표시 초기화
         document.querySelectorAll('.time-display').forEach(display => {
